@@ -234,8 +234,8 @@ RUN gem install gist
 
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
-  apt-get update -qq && \
-  apt-get install -qq golang-go
+  apt-get update && \
+  apt-get install -y golang-go
 
 # Install gotop
 RUN wget -q -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
@@ -405,8 +405,8 @@ ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
-RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git || \
-  vcsh clone https://github.com/sabrehagen/dotfiles.git
+RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git
+  #vcsh clone https://github.com/sabrehagen/dotfiles.git
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
