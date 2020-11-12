@@ -166,27 +166,6 @@ RUN apt-get update -qq && \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
   groupadd --system chrome
 
-# Install cloudstorage
-RUN apt-get install -qq \
-  autoconf \
-  fuse3 \
-  libcurl4-openssl-dev \
-  libfuse3-dev \
-  libjsoncpp-dev \
-  libmicrohttpd-dev \
-  libtinyxml2-dev \
-  libtool \
-  pkg-config && \
-  git clone --depth 1 https://github.com/cloud-computer/libcloudstorage && \
-  cd libcloudstorage && \
-  ./bootstrap && \
-  ./configure --with-curl --with-microhttpd --with-fuse && \
-  make -j$(nproc) && \
-  make install && \
-  echo user_allow_other >> /etc/fuse.conf && \
-  mkdir -p $HOME/.config/cloudstorage && \
-  mkdir $HOME/cloudstorage
-
 # Install cmatrix
 RUN apt-get install -qq libncurses5-dev && \
   git clone --depth 1 https://github.com/abishekvashok/cmatrix && \
@@ -277,10 +256,6 @@ RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.
 RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1/lazygit_0.8.1_Linux_x86_64.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
-# Intall microsoft teams
-RUN wget -O MsTeams.deb https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_1.3.00.5153_amd64.deb && \
-    apt install ./MsTeams.deb -q -y
-
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.90.0/musikcube_0.90.0_ubuntu_disco_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
@@ -291,11 +266,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
-  git clone https://github.com/novnc/websockify /opt/noVNC/utils/websockify
-
-# Install onedrive client
-RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
-  chmod +x /usr/local/bin/onedrive
+  git clone https://github.com/novnc/websockify /opt/noVNC/utils/websockify \
+  sudo ln -s /opt/noVNC/utils/launch.sh /usr/local/bin/novnc
 
 # Install pulseaudio mixer
 RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/GeorgeFilipkin/pulsemixer/master/pulsemixer && \
