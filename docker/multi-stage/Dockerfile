@@ -1,4 +1,4 @@
-FROM ubuntu:19.04
+FROM bonegames/utilities
 
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
@@ -18,7 +18,7 @@ ENV TZ Australia/Sydney
 ENV HOME /home/$USER
 
 # Ensure container image sources are always available by using 'old' repositories
-RUN sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
+#RUN sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
 
 # Install locales and timezone data
 RUN apt-get update -qq && \
@@ -35,92 +35,6 @@ RUN locale-gen $LANG && \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
   echo $TZ > /etc/timezone
 
-# Install desktop environment utilities
-RUN apt-get update -qq && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
-  alsa-utils \
-  apt-file \
-  apt-utils \
-  arandr \
-  asciinema \
-  autorandr \
-  build-essential \
-  cmake \
-  compton \
-  curl \
-  dnsutils \
-  dnsmasq \
-  docker.io \
-  feh \
-  figlet \
-  fonts-font-awesome \
-  g++ \
-  gcc \
-  git \
-  gosu \
-  gtk-theme-switch \
-  gtk+3.0 \
-  htop \
-  httpie \
-  iftop \
-  iputils-ping \
-  irssi \
-  jq \
-  keychain \
-  libnotify-bin \
-  libnss3-tools \
-  libterm-readkey-perl \
-  lsb-core \
-  maim \
-  make \
-  man-db \
-  mpd \
-  nano \
-  ncdu \
-  ncmpcpp \
-  neovim \
-  net-tools \
-  netcat-openbsd \
-  numlockx \
-  openssl \
-  openvpn \
-  pavucontrol-qt \
-  pcmanfm \
-  perl \
-  pulseaudio \
-  python \
-  python-pip \
-  python3 \
-  python3-pip \
-  ranger \
-  ruby \
-  rofi \
-  software-properties-common \
-  ssh \
-  sudo \
-  sxhkd \
-  tigervnc-scraping-server \
-  tigervnc-standalone-server \
-  tmux \
-  transmission-cli \
-  transmission-common \
-  transmission-daemon \
-  tree \
-  vcsh \
-  vim \
-  wmctrl \
-  xauth \
-  xautolock \
-  xdotool \
-  xinit \
-  xinput \
-  xclip \
-  xorg \
-  xsel \
-  xserver-xorg \
-  zsh \
-  zathura && \
-  apt-file update
 
 # Install alacritty
 RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.3.3/Alacritty-v0.3.3-ubuntu_18_04_amd64.deb && \
