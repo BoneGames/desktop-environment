@@ -1,7 +1,40 @@
-REPO_ROOT=$(dirname $(readlink -f $0))/../..
+REPO_ROOT=$(dirname $(readlink -f $0))/../../..
 
 # Export desktop environment shell configuration
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
+
+# If no tag supplied - use default from environment.sh
+TAG=''
+if [ -z $1 ]; then
+    echo "no tag supplied, using env tag: $DESKTOP_ENVIRONMENT_CONTAINER_TAG"
+    TAG="$DESKTOP_ENVIRONMENT_CONTAINER_TAG"
+    exit
+else
+    TAG="$1"
+fi
+
+# Make sure supplied tag is a local docker image tag
+CHECK=$(docker images | awk '{print $2}')
+
+if [[ "${CHECK}" != *"$TAG"* ]]; then
+    echo "'${TAG}' is not a docker image tag. Current local tags:"
+    echo "${CHECK}"
+    exit
+fi
+
+VIDEO_SOCKET=''
+
+# If vmware machine
+if [ -c /dev/vsock ]; then
+    echo "you are using a vmware machine u little fucker"
+    VIDEO_SOCKET='vsock'
+elif [ -c /dev/vhost-vsock ]; then
+    echo "you are using a virtualbox machine u little cunt"
+    VIDEO_SOCKET='vhost-vsock'
+else
+    echo "you are using a host machine u braggart"
+    VIDEO_SOCKET='video0'
+fi
 
 # Ensure the desktop environment network exists
 docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
@@ -18,7 +51,7 @@ docker run \
   --device /dev/input \
   --device /dev/snd \
   --device /dev/tty3 \
-  --device /dev/vsock \
+  --device /dev/$VIDEO_SOCKET \
   --env DESKTOP_ENVIRONMENT_USER \
   --group-add audio \
   --group-add docker \
@@ -66,7 +99,7 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_USER_TORRENTS:$DESKTOP_ENVIRONMENT_USER_TORRENTS \
   --volume DESKTOP_ENVIRONMENT_USER_VIDEOS:$DESKTOP_ENVIRONMENT_USER_VIDEOS \
   --workdir $DESKTOP_ENVIRONMENT_USER_HOME \
-  ben/desktop-environment:multi-stage \
+  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$TAG \
   sleep infinity
 
 # Wait until the desktop environment container is running before proceeding
