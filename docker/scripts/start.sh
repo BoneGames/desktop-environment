@@ -20,6 +20,9 @@ else
     VIDEO_SOCKET='video0'
 fi
     
+echo "$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG"
+exit
+
 # Start the desktop environment container
 docker run \
   --cap-add NET_ADMIN \
