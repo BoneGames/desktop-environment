@@ -10,7 +10,7 @@ docker run \
   --device /dev/tty$DESKTOP_ENVIRONMENT_HOST_TTY \
   --env DISPLAY \
   --interactive \
-  --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
+  --name bonegames/desktop-environment-tmux \
   --network host \
   --rm \
   --volume /var/run/docker.sock:/var/run/docker.sock \
