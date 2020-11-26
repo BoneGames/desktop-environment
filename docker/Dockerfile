@@ -1,3 +1,5 @@
+FROM Ubuntu:20.04
+
 # Install cmatrix
 RUN apt-get install -qq \
   libncurses5-dev && \
