@@ -4,13 +4,15 @@ IMAGE=$(basename $(dirname $0))
 # Export desktop environment shell configuration
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
+echo $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE-$IMAGE
+
 # Start the desktop environment container
 docker run \
   --detach \
   --device /dev/tty$DESKTOP_ENVIRONMENT_HOST_TTY \
   --env DISPLAY \
   --interactive \
-  --name desktop-environment-tmux \
+  --name $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE-$IMAGE \
   --network host \
   --rm \
   --volume /var/run/docker.sock:/var/run/docker.sock \
