@@ -52,9 +52,9 @@ RUN sudo apt-get install -qq \
   uthash-dev && \
   git clone --depth 1 https://github.com/yshui/picom /opt/picom && cd /opt/picom \
   git submodule update --init --recursive && \
-  meson --buildtype=release . build && \
-  ninja -C build && \
-  ninja -C build install
+  sudo meson --buildtype=release . build && \
+  sudo ninja -C build && \
+  sudo ninja -C build install
 
 # Start i3
 CMD i3
