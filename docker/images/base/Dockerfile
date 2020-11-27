@@ -5,7 +5,7 @@ ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 
-ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
+ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD:-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
 ENV EDITOR nano
 ENV LANG en_US.UTF-8
 ENV LANGUAGE $LANG
@@ -163,11 +163,6 @@ RUN chown -R $USER:$USER $HOME /opt
 USER $USER
 WORKDIR $HOME
 
-# Clone desktop environment repository
-RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment.git /opt/desktop-environment || \
-  git clone https://github.com/sabrehagen/desktop-environment.git /opt/desktop-environment && \
-  sudo ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run
-
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
   sudo mknod $HOME/.config/openvpn/tun c 10 200 && \
@@ -177,12 +172,14 @@ RUN mkdir -p $HOME/.config/openvpn && \
 ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo Building from dotfiles...
 
+# Clone desktop environment repository
+RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment.git /opt/desktop-environment || \
+  git clone https://github.com/sabrehagen/desktop-environment.git /opt/desktop-environment && \
+  sudo ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run
+
 # Clone user dotfiles or fallback to sabrehagen dotfiles
 RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git || \
   vcsh clone https://github.com/sabrehagen/dotfiles.git
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
-
-# Start the sd
-CMD ~/.config/scripts/startup.sh

@@ -11,7 +11,7 @@ docker run \
   --device /dev/input \
   --device /dev/snd \
   --device /dev/tty$DESKTOP_ENVIRONMENT_HOST_TTY \
-  --device /dev/video0 \
+  --device /dev/$DESKTOP_ENVIRONMENT_VIDEO_SOCKET \
   --env DISPLAY=${DISPLAY-:1} \
   --env DESKTOP_ENVIRONMENT_HOST_TTY \
   --group-add audio \

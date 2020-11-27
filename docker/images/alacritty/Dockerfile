@@ -8,10 +8,10 @@ RUN sudo apt-get update -qq && \
   libfreetype6-dev \
   libfontconfig1-dev \
   libxcb-xfixes0-dev && \
-  curl https://sh.rustup.rs -sSf | sh -s -- -y && \
+  curl -sSf -4 "https://sh.rustup.rs" | sh -s -- -y && \
   export PATH=$PATH:$HOME/.cargo/bin && \
   rustup override set stable && \
   rustup update stable && \
   cargo install --git https://github.com/alacritty/alacritty --tag v0.5.0
 
-ENTRYPOINT alacritty
+ENTRYPOINT ~/.config/scripts/startup.sh && sleep infinity
