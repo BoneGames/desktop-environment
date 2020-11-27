@@ -5,7 +5,7 @@ ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 
-ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD:-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
+ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
 ENV EDITOR nano
 ENV LANG en_US.UTF-8
 ENV LANGUAGE $LANG
@@ -79,9 +79,11 @@ RUN apt-get update -qq && \
   tmux \
   tree \
   vcsh \
+  wmctrl \
   x11-xserver-utils \
   xauth \
   xclip \
+  xdg-utils \
   xdotool \
   xinput \
   xsel \
@@ -181,3 +183,6 @@ RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git ||
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
+
+# Start the sd
+CMD ~/.config/scripts/startup.sh
