@@ -275,9 +275,9 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   rm jump.deb
 
 # Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.95.0/musikcube_0.95.0_ubuntu_eoan_amd64.deb && \
-  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
-  rm musikcube.deb
+# RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.95.0/musikcube_0.95.0_ubuntu_eoan_amd64.deb && \
+#   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
+#   rm musikcube.deb
 
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
@@ -329,22 +329,18 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
 
-# Install skype
-RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
-  dpkg -i skype.deb && \
-  rm skype.deb
+# # Install skype
+# RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
+#   dpkg -i skype.deb && \
+#   rm skype.deb
 
-# Install slack
-RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.9.1-amd64.deb && \
-  dpkg -i slack.deb || apt-get install -qq --fix-broken && \
-  rm slack.deb
+# # Install slack
+# RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.9.1-amd64.deb && \
+#   dpkg -i slack.deb || apt-get install -qq --fix-broken && \
+#   rm slack.deb
 
-# Install speedtest
-RUN pip install --user speedtest-cli
-
-# Install timeago
-RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
-  chmod +x /usr/local/bin/timeago
+# # Install speedtest
+# RUN pip install --user speedtest-cli
 
 # Install tormix
 RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
@@ -400,6 +396,20 @@ RUN yarn global add \
   rebase-editor \
   tldr && \
   tldr --update
+
+# Install timeago
+RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
+ chmod +x /usr/local/bin/timeago
+
+# Install virtualbox pre-reqs
+RUN apt-get install -qq gnupg2 systemd
+
+# Install virtualbox
+RUN wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | apt-key add - && \
+  wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | apt-key add - && \
+  add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian bionic contrib" && \
+  apt-get update && \
+  apt-get -qq install virtualbox
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
