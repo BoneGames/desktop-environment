@@ -411,6 +411,25 @@ RUN mkdir -p $HOME/.config/openvpn && \
   mknod $HOME/.config/openvpn/tun c 10 200 && \
   chmod 600 $HOME/.config/openvpn/tun
 
+
+# install vbox dependencies
+RUN apt-get -qq install psmisc \
+  libcurl4 \
+  libopus0 \
+  libqt5core5a \
+  libqt5gui5 \
+  libqt5opengl5 \
+  libqt5printsupport5 \
+  libqt5widgets5 \
+  libqt5x11extras5 \
+  libsdl1.2debian \
+  libvpx6 \
+  python2
+
+# Install virtualbox
+RUN wget -q -O vbox.deb https://download.virtualbox.org/virtualbox/6.1.10/virtualbox-6.1_6.1.10-138449~Ubuntu~eoan_amd64.deb && \
+  dpkg -i vbox.deb || apt-get install -qq --fix-broken
+
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
