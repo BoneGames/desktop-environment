@@ -430,8 +430,13 @@ RUN wget -O libvpx6.deb -nv http://archive.ubuntu.com/ubuntu/pool/main/libv/libv
   dpkg -i libvpx6.deb
 
 # Install virtualbox
-RUN wget -q -O vbox.deb https://download.virtualbox.org/virtualbox/6.1.10/virtualbox-6.1_6.1.10-138449~Ubuntu~eoan_amd64.deb && \
+# RUN wget -q -O vbox.deb https://download.virtualbox.org/virtualbox/6.1.10/virtualbox-6.1_6.1.10-138449~Ubuntu~eoan_amd64.deb && \
+#   dpkg -i vbox.deb || apt-get install -qq --fix-broken
+
+RUN wget -q -O vbox.deb http://download.virtualbox.org/virtualbox/6.1.16/virtualbox-6.1_6.1.16-140961~Ubuntu~eoan_amd64.deb && \
   dpkg -i vbox.deb || apt-get install -qq --fix-broken
+
+# RUN apt-get -qq install virtualbox
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
