@@ -19,6 +19,8 @@ docker run \
   --device /dev/snd \
   --device /dev/tty3 \
   --device /dev/video0 \
+  --device /dev/vboxdrv:/dev/vboxdrv \
+  --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
   --env DESKTOP_ENVIRONMENT_USER \
   --group-add audio \
   --group-add docker \
