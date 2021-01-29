@@ -411,6 +411,7 @@ RUN mkdir -p $HOME/.config/openvpn && \
   mknod $HOME/.config/openvpn/tun c 10 200 && \
   chmod 600 $HOME/.config/openvpn/tun
 
+RUN apt-get update
 
 # install vbox dependencies
 RUN apt-get -qq install psmisc \
@@ -423,8 +424,10 @@ RUN apt-get -qq install psmisc \
   libqt5widgets5 \
   libqt5x11extras5 \
   libsdl1.2debian \
-  libvpx6 \
   python2
+
+RUN wget -O libvpx6.deb -nv http://archive.ubuntu.com/ubuntu/pool/main/libv/libvpx/libvpx6_1.8.2-1build1_amd64.deb && \
+  dpkg -i libvpx6.deb
 
 # Install virtualbox
 RUN wget -q -O vbox.deb https://download.virtualbox.org/virtualbox/6.1.10/virtualbox-6.1_6.1.10-138449~Ubuntu~eoan_amd64.deb && \
